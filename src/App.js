@@ -36,10 +36,22 @@ function App() {
                 className={password !== "" ? "has-val input" : "input"} 
                 type="password"
                 value={password}
-                OnChange={e => setPassword(e.target.value)}
+                onChange={e => setPassword(e.target.value)}
               />
               <span className="focus-input" data-placeholder="Password"></span>
             </div>
+
+            {/* ESTA COM ERRO */}
+
+            {/* <div className="wrap-input">
+              <input 
+                className={password !== "" ? "has-val input" : "input"} 
+                type="password"
+                value={password}
+                OnChange={e => setPassword(e.target.value)}
+              />
+              <span className="focus-input" data-placeholder="Password"></span>
+            </div> */}
 
             <div className="container-login-form-btn">
               <button className="login-form-btn">Entrar</button>
