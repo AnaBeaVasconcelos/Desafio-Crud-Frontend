@@ -5,6 +5,7 @@ import { Home } from '../pages/Home';
 import { Products } from '../pages/Products';
 import { Categories } from '../pages/Categories';
 import { isAuthenticaded } from './auth';
+import { Sidebar } from '../components/Sidebar';
 
 export const AppRoutes = () => {
   if (isAuthenticaded()) {
@@ -15,10 +16,16 @@ export const AppRoutes = () => {
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/home" element={isAuthenticaded() ? <Home /> : <Navigate to="/" />} />
-        <Route path="/products" element={isAuthenticaded() ? <Products /> : <Navigate to="/" />} />
-        <Route path="/categories" element={isAuthenticaded() ? <Categories /> : <Navigate to="/" />} />
+        <Route path="/sidebar" element={<Sidebar />} />
       </Routes>
+
+      <Sidebar>
+        <Routes>
+          <Route path="/home" element={isAuthenticaded() ? <Home /> : <Navigate to="/" />} />
+          <Route path="/products" element={isAuthenticaded() ? <Products /> : <Navigate to="/" />} />
+          <Route path="/categories" element={isAuthenticaded() ? <Categories /> : <Navigate to="/" />} />
+        </Routes>
+      </Sidebar>
     </Router>
   );
 }
