@@ -8,11 +8,9 @@ import { isAuthenticaded } from './auth';
 
 export const AppRoutes = () => {
   if (isAuthenticaded()) {
-    console.log(isAuthenticaded());
   }
 
   return (
-    console.log(isAuthenticaded()),
     <Router>
       <Routes>
         <Route path="/" element={<Login />} />

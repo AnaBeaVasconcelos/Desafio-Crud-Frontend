@@ -20,7 +20,6 @@ export const Login = () => {
       const response = await api.post('api/login', { email, password });
       localStorage.setItem('token', response.data.response.token);
 
-      console.log(isAuthenticaded());
      if (isAuthenticaded() === true) {
 
       window.location.href = "/home";
