@@ -1,9 +1,9 @@
 import { LayoutComponents } from '../../components/LayoutComponents';
 
-export const Home = () => {
+export const Products = () => {
   return (
     <LayoutComponents>
-      <h1>HOME</h1>
+      <h1>PRODUCTS</h1>
     </LayoutComponents>
   );
 }

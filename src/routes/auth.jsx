@@ -1,9 +1,8 @@
-
 export const isAuthenticaded = () => {
   const token = localStorage.getItem('token');
   if(token){
-    return false;
-  }else{
     return true;
+  }else{
+    return false;
   }
 }

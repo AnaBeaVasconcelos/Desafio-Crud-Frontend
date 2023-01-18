@@ -1,24 +1,31 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import React, { useState } from 'react';
 import jpIMG from '../../assets/jp.svg';
 import { LayoutComponents } from '../../components/LayoutComponents';
 import api from '../../services/api';
+import { isAuthenticaded } from '../../routes/auth';
 
 
 export const Login = () => {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const navigate = useNavigate();
 
   async function handleLogin(e) {
     e.preventDefault();
+    isAuthenticaded();
+   
 
     try {
       const response = await api.post('api/login', { email, password });
-      localStorage.setItem('token', response.data.token);
+      localStorage.setItem('token', response.data.response.token);
 
-      navigate('/home');
+      console.log(isAuthenticaded());
+     if (isAuthenticaded() === true) {
+
+      window.location.href = "/home";
+     }
+
     } catch (err) {
       alert('Falha no login, tente novamente.');
     }
