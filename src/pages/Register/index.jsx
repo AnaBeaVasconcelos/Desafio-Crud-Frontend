@@ -1,5 +1,5 @@
 import { LayoutComponents } from "../../components/LayoutComponents"
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import jpIMG from '../../assets/jp.svg';
 import { Link, useNavigate } from 'react-router-dom';
 import api from '../../services/api';
@@ -11,6 +11,18 @@ export const Register = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const navigate = useNavigate();
+
+  function loadStorage() {
+    const token = localStorage.getItem('token');
+    if (token) {
+      api.defaults.headers.Authorization = `Bearer ${token}`;
+    }
+  }
+
+  useEffect (() => {
+    loadStorage();
+  }, []);
+  
 
   async function handleRegister(e) {
     e.preventDefault();
@@ -29,6 +41,8 @@ export const Register = () => {
         if(res.data.status){
           const response = await api.post('api/login', { email, password });
           localStorage.setItem('token', response.data.response.token);
+          api.defaults.headers.Authorization = `Bearer ${response.data.response.token}`;
+
           navigate('/home');
         }
       });

@@ -13,19 +13,24 @@ export const AppRoutes = () => {
 
   return (
     <Router>
-      <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/sidebar" element={<Sidebar />} />
-      </Routes>
+      {
+        isAuthenticaded() ?
+          (<Sidebar>
+            <Routes>
+              <Route path="*" element={<Home />} />
+              <Route path="/home" element={<Home />} />
+              <Route path="/products" element={<Products />} />
+              <Route path="/categories" element={<Categories />} />
+            </Routes>
+          </Sidebar>) :
+          (<Routes>
+            <Route path="*" element={<Login />} />
+            <Route path="/" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/sidebar" element={<Sidebar />} />
+          </Routes>)
 
-      <Sidebar>
-        <Routes>
-          <Route path="/home" element={isAuthenticaded() ? <Home /> : <Navigate to="/" />} />
-          <Route path="/products" element={isAuthenticaded() ? <Products /> : <Navigate to="/" />} />
-          <Route path="/categories" element={isAuthenticaded() ? <Categories /> : <Navigate to="/" />} />
-        </Routes>
-      </Sidebar>
+      }
     </Router>
   );
 }

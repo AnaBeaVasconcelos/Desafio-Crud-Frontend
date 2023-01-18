@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import jpIMG from '../../assets/jp.svg';
 import { LayoutComponents } from '../../components/LayoutComponents';
 import api from '../../services/api';
@@ -10,6 +10,18 @@ export const Login = () => {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  
+  function loadStorage() {
+    const token = localStorage.getItem('token');
+    if (token) {
+      api.defaults.headers.Authorization = `Bearer ${token}`;
+    }
+  }
+
+  useEffect (() => {
+    loadStorage();
+  }, []);
+  
 
   async function handleLogin(e) {
     e.preventDefault();
@@ -19,6 +31,7 @@ export const Login = () => {
     try {
       const response = await api.post('api/login', { email, password });
       localStorage.setItem('token', response.data.response.token);
+      api.defaults.headers.Authorization = `Bearer ${response.data.response.token}`;
 
      if (isAuthenticaded() === true) {
 
