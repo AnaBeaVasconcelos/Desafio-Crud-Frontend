@@ -1,9 +1,13 @@
-import { FaBars, FaRegChartBar, FaShoppingBag, FaTh } from 'react-icons/fa';
+import { FaBars, FaShoppingBag, FaTh } from 'react-icons/fa';
+import { BiCategory, BiLogOut } from 'react-icons/bi';
 import { NavLink } from 'react-router-dom';
+import { useState } from 'react';
 import './styles.css';
 import api from '../../services/api';
 
-export const Sidebar = ({children}) => {
+export const Sidebar = ({ children }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const toggle = () => setIsOpen(!isOpen);
   const menuItem = [
     {
       path: '/home',
@@ -18,11 +22,12 @@ export const Sidebar = ({children}) => {
     {
       path: '/categories',
       name: 'Categorias',
-      icon: <FaRegChartBar />,
+      icon: <BiCategory />,
     },
     {
       path: '/logout',
       name: 'Sair',
+      icon: <BiLogOut />,
       onclick: async () => {
         await api.post('api/logout');
         window.location.reload();
@@ -34,18 +39,18 @@ export const Sidebar = ({children}) => {
   ]
   return (
     <div className="container">
-      <div className="sidebar">
+      <div style={{ width: isOpen ? "250px" : "50px" }} className="sidebar">
         <div className="top_section">
-          <h1 className="logo">logo</h1>
-          <div className="bars">
-            <FaBars />
+          <h1 style={{ display: isOpen ? "block" : "none" }} className="logo">Logo</h1>
+          <div  style={{ marginLeft: isOpen ? "50px" : "0px" }} className="bars">
+            <FaBars onClick={toggle} />
           </div>
         </div>
         {
           menuItem.map((item, index) => (
             <NavLink to={item.path} key={index} className="menu_item" activeclassname="active">
               <div className="icon">{item.icon}</div>
-              <div className="name" onClick={item.onclick}>{item.name}</div>
+              <div style={{ display: isOpen ? "block" : "none" }} className="link_text" onClick={item.onclick}>{item.name}</div>
             </NavLink>
           ))
         }
