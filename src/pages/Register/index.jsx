@@ -27,8 +27,8 @@ export const Register = () => {
       api.post('api/register', data)
       .then(async (res) =>{
         if(res.data.status){
-          const responseLogin = await api.post('api/login', { email, password });
-          localStorage.setItem('token', responseLogin.data.token);
+          const response = await api.post('api/login', { email, password });
+          localStorage.setItem('token', response.data.response.token);
           navigate('/home');
         }
       });
