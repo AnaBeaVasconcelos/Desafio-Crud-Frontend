@@ -1,7 +1,7 @@
 import { LayoutComponents } from "../../components/LayoutComponents"
 import React, { useEffect, useState } from 'react';
 import jpIMG from '../../assets/jp.svg';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import api from '../../services/api';
 
 export const Register = () => {
@@ -10,7 +10,6 @@ export const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const navigate = useNavigate();
 
   function loadStorage() {
     const token = localStorage.getItem('token');
@@ -19,10 +18,10 @@ export const Register = () => {
     }
   }
 
-  useEffect (() => {
+  useEffect(() => {
     loadStorage();
   }, []);
-  
+
 
   async function handleRegister(e) {
     e.preventDefault();
@@ -31,21 +30,22 @@ export const Register = () => {
       name,
       email,
       password,
-      "password_confirmation":confirmPassword,
-      "nameToken":"nameToken"
+      "password_confirmation": confirmPassword,
+      "nameToken": "nameToken"
     };
 
     try {
       api.post('api/register', data)
-      .then(async (res) =>{
-        if(res.data.status){
-          const response = await api.post('api/login', { email, password });
-          localStorage.setItem('token', response.data.response.token);
-          api.defaults.headers.Authorization = `Bearer ${response.data.response.token}`;
+        .then(async (res) => {
+          if (res.data.status) {
+            const response = await api.post('api/login', { email, password });
+            localStorage.setItem('token', response.data.response.token);
+            api.defaults.headers.Authorization = `Bearer ${response.data.response.token}`;
 
-          navigate('/home');
-        }
-      });
+            window.location.reload();
+
+          }
+        })
     } catch (err) {
       alert('Erro no cadastro, tente novamente.');
     }

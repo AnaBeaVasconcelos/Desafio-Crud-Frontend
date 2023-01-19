@@ -10,7 +10,6 @@
 
 main {
   width: 100%;
-  padding: 20px;
 }
 
 .sidebar {
@@ -24,6 +23,7 @@ main {
 .top_section {
   display: flex;
   align-items: center;
+  justify-content: center;
   padding: 20px 15px;
 }
 
@@ -39,6 +39,7 @@ main {
 
 .menu_item {
   display: flex;
+  align-items: center;
   color: #fff;
   padding: 10px 15px;
   gap: 15px;

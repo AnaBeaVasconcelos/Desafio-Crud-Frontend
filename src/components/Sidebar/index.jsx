@@ -49,7 +49,7 @@ export const Sidebar = ({ children }) => {
         {
           menuItem.map((item, index) => (
             <NavLink to={item.path} key={index} className="menu_item" activeclassname="active">
-              <div className="icon">{item.icon}</div>
+              <div className="icon" onClick={item.onclick}>{item.icon}</div>
               <div style={{ display: isOpen ? "block" : "none" }} className="link_text" onClick={item.onclick}>{item.name}</div>
             </NavLink>
           ))
