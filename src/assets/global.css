@@ -25,6 +25,7 @@ body, html{
 
 .login-form-title img {
   width: 90px;
+  display: unset !important;
 }
 
 .wrap-input {
