@@ -35,7 +35,7 @@ export const Login = () => {
 
      if (isAuthenticaded() === true) {
 
-      window.location.href = "/home";
+      window.location.reload();
      }
 
     } catch (err) {
