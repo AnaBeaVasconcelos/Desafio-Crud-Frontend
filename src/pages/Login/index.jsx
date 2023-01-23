@@ -6,7 +6,6 @@ import api from '../../services/api';
 import { isAuthenticaded } from '../../routes/auth';
 import Swal from 'sweetalert2'
 import { CircularProgress, Button } from '@chakra-ui/react'
-// import { ProgressButton } from '../../components/ProgressButton';
 
 
 export const Login = () => {
