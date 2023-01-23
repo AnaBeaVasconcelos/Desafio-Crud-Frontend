@@ -17,7 +17,7 @@ export const AppRoutes = () => {
         isAuthenticaded() ?
           (<Sidebar>
             <Routes>
-            <Route path="*" element={<p>There's nothing here: 404!</p>} />
+            <Route path="*" element={<Home />} />
               <Route path="/home" element={<Home />} />
               <Route path="/products" element={<Products />} />
               <Route path="/categories" element={<Categories />} />

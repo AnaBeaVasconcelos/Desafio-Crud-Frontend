@@ -4,13 +4,25 @@ import jpIMG from '../../assets/jp.svg';
 import { LayoutComponents } from '../../components/LayoutComponents';
 import api from '../../services/api';
 import { isAuthenticaded } from '../../routes/auth';
+import Swal from 'sweetalert2'
+import { CircularProgress, Button } from '@chakra-ui/react'
+// import { ProgressButton } from '../../components/ProgressButton';
 
 
 export const Login = () => {
-
+  const [loading, setLoading] = useState(false)
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  
+
+  function showProgress() {
+    <CircularProgress
+      color="green.300"
+      size="24px"
+      mr="10px"
+    >
+    </CircularProgress>
+  }
+
   function loadStorage() {
     const token = localStorage.getItem('token');
     if (token) {
@@ -18,28 +30,40 @@ export const Login = () => {
     }
   }
 
-  useEffect (() => {
+  useEffect(() => {
     loadStorage();
   }, []);
-  
+
 
   async function handleLogin(e) {
     e.preventDefault();
     isAuthenticaded();
-   
+
+    setLoading(true)
+    setTimeout(() => {
+      setLoading(false)
+    }, 3000)
+
+    showProgress()
 
     try {
       const response = await api.post('api/login', { email, password });
       localStorage.setItem('token', response.data.response.token);
       api.defaults.headers.Authorization = `Bearer ${response.data.response.token}`;
 
-     if (isAuthenticaded() === true) {
+      if (isAuthenticaded() === true) {
 
-      window.location.reload();
-     }
+        window.location.reload();
+      }
 
     } catch (err) {
-      alert('Falha no login, tente novamente.');
+      setLoading(false)
+
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Erro ao fazer login, tente novamente!'
+      })
     }
   }
 
@@ -74,7 +98,15 @@ export const Login = () => {
         </div>
 
         <div className="container-login-form-btn">
-          <button className="login-form-btn" type="submit">Entrar</button>
+          <Button className="login-form-btn"
+            isLoading={loading}
+            loadingText="Carregando"
+            colorScheme=""
+            variant="solid"
+            type='submit'
+          >
+            Entrar
+          </Button>
         </div>
 
         <div className="text-center">
