@@ -3,13 +3,26 @@ import React, { useEffect, useState } from 'react';
 import jpIMG from '../../assets/jp.svg';
 import { Link } from 'react-router-dom';
 import api from '../../services/api';
+import Swal from 'sweetalert2'
+import { CircularProgress, Button } from '@chakra-ui/react'
+import { ErrorInfo } from "react";
 
 export const Register = () => {
 
+  const [loading, setLoading] = useState(false)
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+
+  function showProgress() {
+    <CircularProgress
+      color="green.300"
+      size="24px"
+      mr="10px"
+    >
+    </CircularProgress>
+  }
 
   function loadStorage() {
     const token = localStorage.getItem('token');
@@ -26,6 +39,13 @@ export const Register = () => {
   async function handleRegister(e) {
     e.preventDefault();
 
+    setLoading(true)
+    setTimeout(() => {
+      setLoading(false)
+    }, 3000)
+
+    showProgress()
+
     const data = {
       name,
       email,
@@ -35,9 +55,35 @@ export const Register = () => {
     };
 
     try {
+      if (data.name, data.email, data.password, data.password_confirmation === "") {
+        setLoading(false);
+
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Preencha todos os campos!'
+        })
+      }
+
+      if (data.password !== data.password_confirmation) {
+        setLoading(false);
+
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'As senhas não conferem!'
+        })
+      }
+
       api.post('api/register', data)
         .then(async (res) => {
+
+          if (!res.data.status) {
+            throw ErrorInfo
+          }
+
           if (res.data.status) {
+            console.log(res)
             const response = await api.post('api/login', { email, password });
             localStorage.setItem('token', response.data.response.token);
             api.defaults.headers.Authorization = `Bearer ${response.data.response.token}`;
@@ -47,7 +93,15 @@ export const Register = () => {
           }
         })
     } catch (err) {
-      alert('Erro no cadastro, tente novamente.');
+
+      setLoading(false)
+
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Erro ao fazer o cadastro, tente novamente!'
+      })
+
     }
   }
 
@@ -63,6 +117,7 @@ export const Register = () => {
 
         <div className="wrap-input">
           <input
+            // required
             className={name !== "" ? "has-val input" : "input"}
             type="name"
             value={name}
@@ -73,6 +128,7 @@ export const Register = () => {
 
         <div className="wrap-input">
           <input
+            // required
             className={email !== "" ? "has-val input" : "input"}
             type="email"
             value={email}
@@ -83,6 +139,7 @@ export const Register = () => {
 
         <div className="wrap-input">
           <input
+            // required
             className={password !== "" ? "has-val input" : "input"}
             type="password"
             value={password}
@@ -93,6 +150,7 @@ export const Register = () => {
 
         <div className="wrap-input">
           <input
+            // required
             className={confirmPassword !== "" ? "has-val input" : "input"}
             type="password"
             value={confirmPassword}
@@ -102,7 +160,15 @@ export const Register = () => {
         </div>
 
         <div className="container-login-form-btn">
-          <button className="login-form-btn" type="submit">Entrar</button>
+          <Button className="login-form-btn"
+            isLoading={loading}
+            loadingText="Carregando"
+            colorScheme=""
+            variant="solid"
+            type='submit'
+          >
+            Finalizar
+          </Button>
         </div>
 
         <div className="text-center">
