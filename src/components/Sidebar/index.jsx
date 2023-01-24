@@ -13,16 +13,25 @@ export const Sidebar = ({ children }) => {
       path: '/home',
       name: 'Home',
       icon: <FaTh />,
+      onclick: () => {
+        window.location('/home');
+      }
     },
     {
       path: '/products',
       name: 'Produtos',
       icon: <FaShoppingBag />,
+      onclick: () => {
+        window.location('/products');
+      }
     },
     {
       path: '/categories',
       name: 'Categorias',
       icon: <BiCategory />,
+      onclick: () => {
+        window.location('/categories');
+      }
     },
     {
       path: '/logout',
@@ -30,6 +39,7 @@ export const Sidebar = ({ children }) => {
       icon: <BiLogOut />,
       onclick: async () => {
         await api.post('api/logout');
+        window.history.pushState({}, '', '/');
         window.location.reload();
 
         localStorage.removeItem('token');

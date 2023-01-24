@@ -13,8 +13,8 @@ main {
 }
 
 .sidebar {
-  background: #000;
-  color: #fff;
+  background: #111;
+  color: azure;
   height: 100vh;
   width: 200px;
   transition: all 0.5s;
@@ -40,21 +40,34 @@ main {
 .menu_item {
   display: flex;
   align-items: center;
-  color: #fff;
+  color: #adadad;
   padding: 10px 15px;
   gap: 15px;
   transition: all 0.5s;
 }
 
 .menu_item:hover {
-  background: lightskyblue;
-  color: #000;
+  -webkit-transition: all 0.4s;
+  -o-transition: all 0.4s;
+  -moz-transition: all 0.4s;
+
+  background: -webkit--transition(to left, #21d4fd, #b721ff);
+  background: -o-transition(to left, #21d4fd, #b721ff);
+  background: -moz-transition(to left, #21d4fd, #b721ff);
+
+  background: linear-gradient(to left, #21d4fd, #b721ff);
+  color: azure;
   transition: all 0.5s;
 }
 
 .active {
-  background: lightskyblue;
-  color: #000;
+
+  background: -webkit--transition(to left, #21d4fd, #b721ff);
+  background: -o-transition(to left, #21d4fd, #b721ff);
+  background: -moz-transition(to left, #21d4fd, #b721ff);
+
+  background: linear-gradient(to left, #21d4fd, #b721ff);
+  color: azure;
 }
 
 .icon,

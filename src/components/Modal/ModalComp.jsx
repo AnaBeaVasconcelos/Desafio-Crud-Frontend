@@ -13,40 +13,62 @@ import {
   Box,
 } from "@chakra-ui/react";
 import { useState } from "react";
+import api from "../../services/api";
 
 export const ModalComp = ({ data, setData, dataEdit, isOpen, onClose }) => {
   const [name, setName] = useState(dataEdit.name || "");
-  const [email, setEmail] = useState(dataEdit.email || "");
+  const [description, setDescription] = useState(dataEdit.description || "");
+  const [price, setPrice] = useState(dataEdit.price || "");
+  const [quantity, setQuantity] = useState(dataEdit.quantity || "");
+  const [category_id, setCategory_id] = useState(dataEdit.category_id || "");
+  const [is_active, setIs_active] = useState(dataEdit.is_active || "");
 
-  const handleSave = () => {
-    if (!name || !email) return;
+  async function editProduct (){
 
-    if (emailAlreadyExists()) {
-      return alert("E-mail já cadastrado!");
-    }
+    const response = await api.put(`/api/products/${dataEdit.id}`, {
+      name,
+      description,
+      price,
+      quantity,
+      category_id,
+      is_active
+    });
+  
 
-    if (Object.keys(dataEdit).length) {
-      data[dataEdit.index] = { name, email };
-    }
 
-    const newDataArray = !Object.keys(dataEdit).length
-      ? [...(data ? data : []), { name, email }]
-      : [...(data ? data : [])];
+    // if (!name || !email) return;
 
-    localStorage.setItem("cad_cliente", JSON.stringify(newDataArray));
+    // if (emailAlreadyExists()) {
+    //   return alert("E-mail já cadastrado!");
+    // }
+  
+   
+    
 
-    setData(newDataArray);
 
-    onClose();
+    // if (Object.keys(dataEdit).length) {
+    //   data[dataEdit.index] = { name, description, price, quantity, category_id, is_active };
+    // }
+
+    // const newDataArray = !Object.keys(dataEdit).length
+    //   ? [...(data ? data : []), { name, description, price, quantity, category_id, is_active }]
+    //   : [...(data ? data : [])];
+
+      
+
+    // localStorage.setItem("cad_produto", JSON.stringify(newDataArray));
+
+    // setData(newDataArray);
+
+    // onClose();
   };
 
-  const emailAlreadyExists = () => {
-    if (dataEdit.email !== email && data?.length) {
-      return data.find((item) => item.email === email);
-    }
+  // const emailAlreadyExists = () => {
+  //   if (dataEdit.email !== email && data?.length) {
+  //     return data.find((item) => item.email === email);
+  //   }
 
-    return false;
-  };
+
 
   return (
     <>
@@ -66,18 +88,50 @@ export const ModalComp = ({ data, setData, dataEdit, isOpen, onClose }) => {
                 />
               </Box>
               <Box>
-                <FormLabel>E-mail</FormLabel>
+                <FormLabel>Descrição</FormLabel>
                 <Input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  type="text"
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                />
+              </Box>
+              <Box>
+                <FormLabel>Preço</FormLabel>
+                <Input
+                  type="text"
+                  value={price}
+                  onChange={(e) => setPrice(e.target.value)}
+                />
+              </Box>
+              <Box>
+                <FormLabel>Quantidade</FormLabel>
+                <Input
+                  type="text"
+                  value={quantity}
+                  onChange={(e) => setQuantity(e.target.value)}
+                />
+              </Box>
+              <Box>
+                <FormLabel>Categoria</FormLabel>
+                <Input
+                  type="text"
+                  value={category_id}
+                  onChange={(e) => setCategory_id(e.target.value)}
+                />
+              </Box>
+              <Box>
+                <FormLabel>Ativo</FormLabel>
+                <Input
+                  type="text"
+                  value={is_active}
+                  onChange={(e) => setIs_active(e.target.value)}
                 />
               </Box>
             </FormControl>
           </ModalBody>
 
           <ModalFooter justifyContent="start">
-            <Button colorScheme="green" mr={3} onClick={handleSave}>
+            <Button colorScheme="green" mr={3} onClick={editProduct}>
               SALVAR
             </Button>
             <Button colorScheme="red" onClick={onClose}>

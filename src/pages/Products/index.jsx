@@ -17,6 +17,14 @@ import api from "../../services/api";
 import { ModalComp } from "../../components/Modal/ModalComp";
 
 export const Products = () => {
+
+  async function getProducts() {
+    const response = await api.get("/api/products/");
+    console.log(response.data.response);
+
+    setData(response.data.response);
+  }
+
   function loadStorage() {
     const token = localStorage.getItem('token');
     if (token) {
@@ -26,7 +34,24 @@ export const Products = () => {
 
   useEffect(() => {
     loadStorage();
+    getProducts();
   }, []);
+
+    // useEffect(() => {
+  //   const db_costumer = localStorage.getItem("cad_produto")
+  //     ? JSON.parse(localStorage.getItem("cad_produto"))
+  //     : [];
+
+  //   setData(db_costumer);
+  // }, [setData]);
+
+  // const handleRemove = (email) => {
+  //   const newArray = data.filter((item) => item.email !== email);
+
+  //   setData(newArray);
+
+  //   localStorage.setItem("cad_produto", JSON.stringify(newArray));
+  // };
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [data, setData] = useState([]);
@@ -37,67 +62,73 @@ export const Products = () => {
     lg: false,
   });
 
-  useEffect(() => {
-    const db_costumer = localStorage.getItem("cad_cliente")
-      ? JSON.parse(localStorage.getItem("cad_cliente"))
-      : [];
-
-    setData(db_costumer);
-  }, [setData]);
-
-  const handleRemove = (email) => {
-    const newArray = data.filter((item) => item.email !== email);
-
-    setData(newArray);
-
-    localStorage.setItem("cad_cliente", JSON.stringify(newArray));
-  };
 
   return (
     <Flex
       h="100vh"
-      align="center"
-      justify="center"
+      justifyContent="center"
+      alignItems="center"
+      flexDirection="column"
       fontSize="20px"
       fontFamily="poppins"
+      backgroundColor="#111"
+      boxShadow="0 10px 10px  rgb(255, 255, 255)"
     >
-      <Box maxW={800} w="100%" h="100vh" py={10} px={2}>
-        <Button colorScheme="blue" onClick={() => [setDataEdit({}), onOpen()]}>
+      <Box w="95%" h="100vh" py={10}>
+        <Button onClick={() => [setDataEdit({}), onOpen()]} variant='solid' _hover={{ bgGradient: 'linear-gradient(to right, #21d4fd, #b721ff)' }} bgGradient='linear-gradient(to left, #21d4fd, #b721ff)' color='#fff'>
           NOVO CADASTRO
         </Button>
 
-        <Box overflowY="auto" height="100%">
+        <Box overflowY="auto">
           <Table mt="6">
-            <Thead>
+            <Thead textAlign="center">
               <Tr>
-                <Th maxW={isMobile ? 5 : 100} fontSize="20px">
+              <Th color="#fff" maxW={isMobile ? 5 : 80} fontSize="20px">
+                  Id
+                </Th>
+                <Th color="#fff" maxW={isMobile ? 5 : 80} fontSize="20px">
                   Nome
                 </Th>
-                <Th maxW={isMobile ? 5 : 100} fontSize="20px">
-                  E-Mail
+                <Th color="#fff" maxW={isMobile ? 5 : 80} fontSize="20px">
+                  Descrição
+                </Th>
+                <Th color="#fff" maxW={isMobile ? 5 : 80} fontSize="20px">
+                  Preço
+                </Th>
+                <Th color="#fff" maxW={isMobile ? 5 : 80} fontSize="20px">
+                  Quantidade
+                </Th>
+                <Th color="#fff" maxW={isMobile ? 5 : 80} fontSize="20px">
+                  Categoria
+                </Th>
+                <Th color="#fff" maxW={isMobile ? 5 : 80} fontSize="20px">
+                  Ativo
                 </Th>
                 <Th p={0}></Th>
                 <Th p={0}></Th>
               </Tr>
             </Thead>
-            <Tbody>
-              {data.map(({ name, email }, index) => (
-                <Tr key={index} cursor="pointer " _hover={{ bg: "gray.100" }}>
+            <Tbody textAlign="center">
+              {data.map(({ name, description, price, quantity, category_id, is_active, id }, index) => (
+                <Tr color="#fff" key={index} cursor="pointer " _hover={{ bgGradient: 'linear-gradient(to left, #21d4fd, #b721ff)' }}>
+                  <Td maxW={isMobile ? 5 : 100}>{id}</Td>
                   <Td maxW={isMobile ? 5 : 100}>{name}</Td>
-                  <Td maxW={isMobile ? 5 : 100}>{email}</Td>
-                  <Td p={0}>
-                    <EditIcon
+                  <Td maxW={isMobile ? 5 : 100}>{description}</Td>
+                  <Td maxW={isMobile ? 5 : 100}>{price}</Td>
+                  <Td maxW={isMobile ? 5 : 100}>{quantity}</Td>
+                  <Td maxW={isMobile ? 5 : 100}>{category_id}</Td>
+                  <Td maxW={isMobile ? 5 : 100}>{is_active}</Td>
+                  <Td p={0} justifyContent  ="center">
+                    <EditIcon margin="10px"
                       fontSize={20}
                       onClick={() => [
-                        setDataEdit({ name, email, index }),
+                        setDataEdit({ name, description, price, quantity, category_id, is_active, id }),
                         onOpen(),
                       ]}
+
                     />
-                  </Td>
-                  <Td p={0}>
                     <DeleteIcon
                       fontSize={20}
-                      onClick={() => handleRemove(email)}
                     />
                   </Td>
                 </Tr>

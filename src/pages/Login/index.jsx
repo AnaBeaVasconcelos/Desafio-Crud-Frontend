@@ -51,7 +51,8 @@ export const Login = () => {
       api.defaults.headers.Authorization = `Bearer ${response.data.response.token}`;
 
       if (isAuthenticaded() === true) {
-
+        
+        window.history.pushState({}, '', '/home');
         window.location.reload();
       }
 
