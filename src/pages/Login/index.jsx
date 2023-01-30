@@ -73,9 +73,7 @@ export const Login = () => {
 
         <span className="login-form-title">Bem Vindo!</span>
 
-        <span className="login-form-title">
-          <img src={jpIMG} alt="Jovem Programador" />
-        </span>
+        <span className='login-form-subtitle'>Desafio 704Apps.</span>
 
         <div className="wrap-input">
           <input

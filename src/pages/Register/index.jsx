@@ -111,9 +111,7 @@ export const Register = () => {
 
         <span className="login-form-title">Criar Conta</span>
 
-        <span className="login-form-title">
-          <img src={jpIMG} alt="Jovem Programador" />
-        </span>
+        <span className='login-form-subtitle'>Desafio 704Apps.</span>
 
         <div className="wrap-input">
           <input

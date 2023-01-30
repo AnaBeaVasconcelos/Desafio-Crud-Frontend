@@ -1,4 +1,4 @@
-import { EditIcon, DeleteIcon } from "@chakra-ui/icons";
+import { EditIcon, DeleteIcon, UnlockIcon, NotAllowedIcon } from "@chakra-ui/icons";
 import {
   Box,
   Flex,
@@ -15,13 +15,12 @@ import {
 import { useEffect, useState } from "react";
 import api from "../../services/api";
 import { ModalComp } from "../../components/Modal/ModalComp";
+import Swal from "sweetalert2";
 
 export const Products = () => {
 
   async function getProducts() {
     const response = await api.get("/api/products/");
-    console.log(response.data.response);
-
     setData(response.data.response);
   }
 
@@ -37,21 +36,6 @@ export const Products = () => {
     getProducts();
   }, []);
 
-    // useEffect(() => {
-  //   const db_costumer = localStorage.getItem("cad_produto")
-  //     ? JSON.parse(localStorage.getItem("cad_produto"))
-  //     : [];
-
-  //   setData(db_costumer);
-  // }, [setData]);
-
-  // const handleRemove = (email) => {
-  //   const newArray = data.filter((item) => item.email !== email);
-
-  //   setData(newArray);
-
-  //   localStorage.setItem("cad_produto", JSON.stringify(newArray));
-  // };
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [data, setData] = useState([]);
@@ -75,15 +59,15 @@ export const Products = () => {
       boxShadow="0 10px 10px  rgb(255, 255, 255)"
     >
       <Box w="95%" h="100vh" py={10}>
-        <Button onClick={() => [setDataEdit({}), onOpen()]} variant='solid' _hover={{ bgGradient: 'linear-gradient(to right, #21d4fd, #b721ff)' }} bgGradient='linear-gradient(to left, #21d4fd, #b721ff)' color='#fff'>
+        <Button margin="10px" onClick={() => [setDataEdit({}), onOpen()]} variant='solid' _hover={{ bgGradient: 'linear-gradient(to right, #21d4fd, #b721ff)' }} bgGradient='linear-gradient(to left, #21d4fd, #b721ff)' color='#fff'>
           NOVO CADASTRO
         </Button>
 
-        <Box overflowY="auto">
+        <Box overflowY="auto" boxShadow="0px 0px 11px 5px aliceblue" borderRadius="20px">
           <Table mt="6">
             <Thead textAlign="center">
               <Tr>
-              <Th color="#fff" maxW={isMobile ? 5 : 80} fontSize="20px">
+                <Th color="#fff" maxW={isMobile ? 5 : 80} fontSize="20px">
                   Id
                 </Th>
                 <Th color="#fff" maxW={isMobile ? 5 : 80} fontSize="20px">
@@ -102,33 +86,73 @@ export const Products = () => {
                   Categoria
                 </Th>
                 <Th color="#fff" maxW={isMobile ? 5 : 80} fontSize="20px">
-                  Ativo
+                  Ações
                 </Th>
                 <Th p={0}></Th>
                 <Th p={0}></Th>
               </Tr>
             </Thead>
             <Tbody textAlign="center">
-              {data.map(({ name, description, price, quantity, category_id, is_active, id }, index) => (
+              {data.map(({ name, description, price, quantity, category, is_active, id }, index) => (
                 <Tr color="#fff" key={index} cursor="pointer " _hover={{ bgGradient: 'linear-gradient(to left, #21d4fd, #b721ff)' }}>
                   <Td maxW={isMobile ? 5 : 100}>{id}</Td>
                   <Td maxW={isMobile ? 5 : 100}>{name}</Td>
                   <Td maxW={isMobile ? 5 : 100}>{description}</Td>
-                  <Td maxW={isMobile ? 5 : 100}>{price}</Td>
-                  <Td maxW={isMobile ? 5 : 100}>{quantity}</Td>
-                  <Td maxW={isMobile ? 5 : 100}>{category_id}</Td>
-                  <Td maxW={isMobile ? 5 : 100}>{is_active}</Td>
-                  <Td p={0} justifyContent  ="center">
+                  <Td maxW={isMobile ? 5 : 100}>R$ {price}</Td>
+                  <Td maxW={isMobile ? 5 : 100}>{quantity} Unidades</Td>
+                  <Td maxW={isMobile ? 5 : 100}>{category.name}</Td>
+                  <Td p={0} justifyContent="center">
+                    {is_active ? (
+                      <UnlockIcon
+                        margin="10px"
+                        fontSize={20}
+                        onClick={() => {
+                          api.put(`/api/products/block/${id}`, { is_active: false });
+                          getProducts();
+                        }}
+                      />
+                    ) : (
+                      <NotAllowedIcon
+                        margin="10px"
+                        fontSize={20}
+                        onClick={() => {
+                          api.put(`/api/products/block/${id}`, { is_active: true });
+                          getProducts();
+                        }}
+                      />
+                    )}
                     <EditIcon margin="10px"
                       fontSize={20}
                       onClick={() => [
-                        setDataEdit({ name, description, price, quantity, category_id, is_active, id }),
+                        setDataEdit({ name, description, price, quantity, category, is_active, id }),
                         onOpen(),
                       ]}
 
                     />
                     <DeleteIcon
                       fontSize={20}
+                      onClick={() => {
+                        Swal.fire({
+                          title: 'Tem certeza que deseja excluir?',
+                          text: "Você não poderá reverter isso!",
+                          icon: 'warning',
+                          showCancelButton: true,
+                          confirmButtonColor: '#3085d6',
+                          cancelButtonColor: '#d33',
+                          confirmButtonText: 'Sim, excluir!'
+                        }).then((result) => {
+                          if (result.isConfirmed) {
+                            api.delete(`/api/products/${id}`);
+                            getProducts();
+                            Swal.fire(
+                              'Excluído!',
+                              'O produto foi excluído.',
+                              'success'
+                            )
+                            window.location.reload();
+                          }
+                        })
+                      }}
                     />
                   </Td>
                 </Tr>
@@ -137,16 +161,18 @@ export const Products = () => {
           </Table>
         </Box>
       </Box>
-      {isOpen && (
-        <ModalComp
-          isOpen={isOpen}
-          onClose={onClose}
-          data={data}
-          setData={setData}
-          dataEdit={dataEdit}
-          setDataEdit={setDataEdit}
-        />
-      )}
-    </Flex>
+      {
+        isOpen && (
+          <ModalComp
+            isOpen={isOpen}
+            onClose={onClose}
+            data={data}
+            setData={setData}
+            dataEdit={dataEdit}
+            setDataEdit={setDataEdit}
+          />
+        )
+      }
+    </Flex >
   );
 };

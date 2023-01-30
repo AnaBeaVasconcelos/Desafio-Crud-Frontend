@@ -23,11 +23,17 @@ html {
 
   line-height: 1.2;
   text-align: center;
+  margin-bottom: 50px;
 }
 
-.login-form-title img {
-  width: 90px;
-  display: unset !important;
+.login-form-subtitle {
+  display: block;
+  font-size: 16px;
+  color: azure;
+
+  line-height: 1.2;
+  text-align: center;
+  margin-bottom: 55px;
 }
 
 .wrap-input {
