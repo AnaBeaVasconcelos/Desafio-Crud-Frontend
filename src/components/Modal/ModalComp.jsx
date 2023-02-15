@@ -188,9 +188,20 @@ export const ModalComp = ({ data, setData, dataEdit, isOpen, onClose }) => {
               <Box>
                 <FormLabel>Quantidade</FormLabel>
                 <Input
-                  type="number"
+                  type="text"
                   value={quantity}
-                  onChange={(e) => setQuantity(e.target.value)}
+                  onChange={(e) => {if (isNaN(e.target.value)) {
+                    Swal.fire({
+                      customClass: {
+                        container: 'my-swal'
+                      },
+                      icon: 'error',
+                      title: 'Oops...',
+                      text: 'Digite apenas números!',
+                    })
+                    return;
+                  } setQuantity(e.target.value)}}
+                
                 />
               </Box>
               <Box>
